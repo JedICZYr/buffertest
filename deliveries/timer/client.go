@@ -19,14 +19,16 @@ func Start(wg *sync.WaitGroup, ch chan<- []byte, topic string) error {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 	go func() {
-		select {
-		case s := <-sig:
-			log.Println("Recevied Signal:", s)
-			close(ch)
-			wg.Done()
-		default:
-			output <- []byte("Message")
-			time.Sleep(10 * time.Millisecond)     // sleep for 10 Milliseconds
+		for {
+			select {
+				case s := <-sig:
+					log.Println("Recevied Signal:", s)
+					close(ch)
+					wg.Done()
+				default:
+					output <- []byte("Message")
+					time.Sleep(10 * time.Millisecond)     // sleep for 10 Milliseconds
+			}
 		}
 	}()
 	return nil

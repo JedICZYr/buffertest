@@ -19,10 +19,10 @@ func (a *LoggerAdapter) logErr(err error) {
 }
 
 // Processes an event to detemine if action is required
-func (a *LoggerAdapter) CreateMetric(ctx context.Context, data string) error {
+func (a *LoggerAdapter) CreateMetric(ctx context.Context, data *DataStruct) error {
 	defer a.Logger.Sync()
 	
-	err := a.Usecase.CreateCPUMetrics(ctx, data)
+	err := a.Usecase.CreateMetric(ctx, data)
 	a.logErr(err)
 	return err
 }

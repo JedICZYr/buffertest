@@ -11,9 +11,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var promserver *PrometheusServer
+
 // CMDBPCService is the top level signature of this service
 type OneService interface {
-	CreateMetric(ctx context.Context, data string) error
+	CreateMetric(ctx context.Context, data *DataStruct) error
 	CloseRepository() error
 }
 
@@ -58,6 +60,7 @@ func Init(integration bool) (OneService, error) {
 		t_port, _ = strconv.Atoi(env_t_port)
 	}
 
+	promserver= NewPrometheusServer()
 	repository := NewTimeScaleDBRepository(t_server, t_user, t_pass, t_db, t_port)
 
 	usecase := &LoggerAdapter{

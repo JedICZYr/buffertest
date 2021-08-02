@@ -12,7 +12,7 @@ var (
 )
 
 type repository interface {
-	CreateMetric(ctx context.Context, data string) error
+	CreateMetric(ctx context.Context, data *DataStruct) error
 	CloseRepository() error
 }
 
@@ -22,7 +22,7 @@ type Usecase struct {
 }
 
 // CreateCPUMetrics creates a single metric
-func (u *Usecase) CreateMetric(ctx context.Context, data string) error {
+func (u *Usecase) CreateMetric(ctx context.Context, data *DataStruct) error {
 	validate = validator.New()
 	validate.SetTagName("form")
 	if err := validate.Struct(*data); err != nil {
@@ -30,8 +30,9 @@ func (u *Usecase) CreateMetric(ctx context.Context, data string) error {
 		return validationErrors
 	}
 
+	promserver.msgProcessed.Inc()
 	if err := u.Repository.CreateMetric(ctx, data); err != nil {
-		return errors.Wrap(err, "error creating new CPU Data")
+		return errors.Wrap(err, "error creating new Metric")
 	}
 
 	return nil

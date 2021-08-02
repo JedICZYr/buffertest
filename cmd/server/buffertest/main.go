@@ -1,8 +1,8 @@
 package main
 
 import (
-	delivery "github.com/gulfcoastdevops/buffertest/deliveries/timer"
-	service "github.com/gulfcoastdevops/buffertest/one"
+	delivery "github.com/JedICZYr/buffertest/deliveries/timer"
+	service "github.com/JedICZYr/buffertest/buffertest"
 	"log"
 	"sync"
 )
